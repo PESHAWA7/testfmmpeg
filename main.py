@@ -2,7 +2,7 @@ import subprocess
 from pytube import YouTube
 
 # Example short video URL (replace with your own if needed)
-yt_url = "https://youtu.be/JORaOqnh2KM?si=-X_YeDHuqwcPcvWU"  # Sample short video from yt-dlp project
+yt_url = "https://youtu.be/a_jqAdJaBmA?si=ly9YVj1Rb2pfdF7e"  # Sample short video from yt-dlp project
 # Output file name
 output_filename = "input.mp4"
 
