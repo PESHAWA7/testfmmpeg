@@ -5,7 +5,7 @@ from telethon.tl.types import MessageMediaPhoto, MessageMediaDocument
 from telethon.tl.types import InputPeerChannel
 import asyncio
 import tqdm
-import subprocess
+from moviepy.editor import VideoFileClip, ImageClip, concatenate_videoclips
 # Load .env
 load_dotenv()
 # api_id = int(os.getenv("API_ID"))
@@ -55,26 +55,33 @@ def download_and_forward(chat, limit):
 
                 if filename:
 
-                    # Input and output file paths
-                    input_file = filename
-                    output_file = "output_test.mp4"
+                    # Main video
+                    main = VideoFileClip(filename)
 
-                    # FFmpeg command: trim 10 seconds, overlay text
-                    command = [
-                        "ffmpeg",
-                        "-i", input_file,
-                        "-vf", "drawtext=text='Test Video':fontcolor=white:fontsize=30:x=(w-text_w)/2:y=h-60",
-                        "-t", "10",
-                        "-c:a", "copy",
-                        output_file
-                    ]
+                    # Resize logo and overlay it
+                    logo = (ImageClip("1.jpg")
+                            .set_duration(main.duration)
+                            .resize(height=50)  # Resize logo
+                            .margin(right=8, top=8, opacity=0)  # Optional margin
+                            .set_pos(("right", "top")))  # Position: top-right
 
-                    # Run the command
-                    try:
-                        subprocess.run(command, check=True)
-                        print("✅ Video edited successfully.")
-                    except subprocess.CalledProcessError as e:
-                        print("❌ FFmpeg error:", e)
+                    # Intro image shown for 3 seconds
+                    intro = (ImageClip("2.jpg")
+                            .set_duration(3)
+                            .resize(main.size))
+
+                    # Final output
+                    final = concatenate_videoclips([intro, main])
+                    final = final.set_audio(main.audio)  # keep audio
+                    final = final.set_duration(final.duration)
+
+                    # Add logo overlay
+                    final = final.set_audio(main.audio).fx(lambda clip: clip.set_duration(main.duration))
+                    final = final.set_duration(final.duration)
+                    final = final.overlay(logo)
+
+                    # Export final video
+                    final.write_videofile("output.mp4", codec="libx264", audio_codec="aac")
 
 
                     print(f"\n✅ Downloaded: {filename}")
