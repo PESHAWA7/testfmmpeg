@@ -80,7 +80,7 @@ def download_and_forward(chat, limit):
                     print(f"\n✅ Downloaded: {filename}")
 
                     # Send to another channel
-                    client.send_file(channel_to_send, filename, caption=f"{msg.text}")
+                    client.send_file(channel_to_send, output_file, caption=f"{msg.text}")
                     print(f"🚀 Sent to {channel_to_send}\n")
 
                     
