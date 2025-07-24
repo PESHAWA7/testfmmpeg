@@ -85,9 +85,9 @@ def download_and_forward(chat, limit):
 
                     
 
-                    # Delete file
-                    os.remove(filename)
-                    print(f"🗑️ Deleted {filename}")
+                    # # Delete file
+                    # os.remove(filename)
+                    # print(f"🗑️ Deleted {filename}")
 
             except Exception as e:
                 print(f"❌ file Error : {e}")
